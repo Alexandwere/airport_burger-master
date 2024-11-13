@@ -14,13 +14,10 @@ import static com.javaacademy.burger.Currency.USD;
 import static com.javaacademy.burger.dish.DishType.FRIED_POTATO;
 import static com.javaacademy.burger.dish.DishType.RIBS;
 
-//6. Пришла проверка из санэпидемстанции, хочет проверить качество еды. Написать тесты, которые проверяют работу ресторана, но никакой оплаты от санэпидемстанции мы конечно же не дождемся, поэтому настоящий терминал оплаты не должен работать:
-//Ситуация №1: клиент захотел купить ребра за рубли. Заказал ребра, получил чек(700 руб, ребра, рубли), подошел за заказом, получил ребра.
-
 public class SteakhouseTest {
 
     @Test
-    @DisplayName("Юнит тест работы ресторана")
+    @DisplayName("Работа ресторана в обход терминала")
     public void successWork() {
         PayTerminal spyTerminal = Mockito.spy(PayTerminal.class);
         Steakhouse steakhouse = new Steakhouse(new Waitress(), new Kitchen(), spyTerminal);

@@ -1,9 +1,5 @@
 package com.javaacademy.burger;
 
-//4. Написать тесты, которые проверяют работу терминала оплаты:
-//Ситуация №1: На оплату поступил бургер, оплата в рублях. Вернулся чек с оплатой в котором указано: 300 рублей, валюта - рубль, товар - бургер.
-//Ситуация №2: На оплату поступил бургер, оплата в мозамбикских долларах, вылетела ошибка NotAcceptedCurrencyException
-
 import com.javaacademy.burger.exception.NotAcceptedCurrencyException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
