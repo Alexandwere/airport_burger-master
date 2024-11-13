@@ -13,6 +13,7 @@ import static com.javaacademy.burger.Currency.RUB;
 import static com.javaacademy.burger.Currency.USD;
 import static com.javaacademy.burger.dish.DishType.FRIED_POTATO;
 import static com.javaacademy.burger.dish.DishType.RIBS;
+import static org.mockito.ArgumentMatchers.eq;
 
 public class SteakhouseTest {
 
@@ -36,26 +37,24 @@ public class SteakhouseTest {
     @DisplayName("Проверка прохождения заказов через терминал")
     public void terminalWork() {
         Kitchen kitchen = Mockito.mock(Kitchen.class);
-        Waitress waitress = Mockito.spy(Waitress.class);
-        PayTerminal payTerminal = new PayTerminal();
+        Waitress waitress = Mockito.mock(Waitress.class);
+        PayTerminal spyTerminal = Mockito.spy(PayTerminal.class);
+        Mockito.when(waitress.giveOrderToKitchen(Mockito.any(), eq(kitchen))).thenReturn(true);
+        Steakhouse steakhouse = new Steakhouse(waitress, kitchen, spyTerminal);
 
-        Mockito.doReturn(true).when(waitress).giveOrderToKitchen(Mockito.any(), Mockito.any());
-        Steakhouse steakhouse = new Steakhouse(waitress, kitchen, payTerminal);
-        Steakhouse spySteakhouse = Mockito.spy(steakhouse);
-
-        Paycheck paycheck1 = spySteakhouse.makeOrder(RIBS, RUB);
+        Paycheck paycheck1 = steakhouse.makeOrder(RIBS, RUB);
         Paycheck expected1 = new Paycheck(RIBS.getPrice(), RUB, RIBS);
         Assertions.assertEquals(expected1, paycheck1);
 
         Mockito.doReturn(new Paycheck(BigDecimal.ONE, USD, FRIED_POTATO))
-                .when(spySteakhouse).makeOrder(FRIED_POTATO, USD);
-        Paycheck paycheck2 = spySteakhouse.makeOrder(FRIED_POTATO, USD);
+                .when(spyTerminal).pay(FRIED_POTATO, USD);
+        Paycheck paycheck2 = steakhouse.makeOrder(FRIED_POTATO, USD);
         Paycheck expected2 = new Paycheck(BigDecimal.ONE, USD, FRIED_POTATO);
         Assertions.assertEquals(expected2, paycheck2);
 
         Mockito.doReturn(new Paycheck(BigDecimal.ONE, MOZAMBICAN_DOLLARS, FRIED_POTATO))
-                .when(spySteakhouse).makeOrder(FRIED_POTATO, MOZAMBICAN_DOLLARS);
-        Paycheck paycheck3 = spySteakhouse.makeOrder(FRIED_POTATO, MOZAMBICAN_DOLLARS);
+                .when(spyTerminal).pay(FRIED_POTATO, MOZAMBICAN_DOLLARS);
+        Paycheck paycheck3 = steakhouse.makeOrder(FRIED_POTATO, MOZAMBICAN_DOLLARS);
         Paycheck expected3 = new Paycheck(BigDecimal.ONE, MOZAMBICAN_DOLLARS, FRIED_POTATO);
         Assertions.assertEquals(expected3, paycheck3);
     }
