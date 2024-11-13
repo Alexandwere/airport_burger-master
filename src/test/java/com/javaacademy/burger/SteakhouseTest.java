@@ -19,8 +19,9 @@ public class SteakhouseTest {
     @Test
     @DisplayName("Работа ресторана в обход терминала")
     public void successWork() {
-        PayTerminal spyTerminal = Mockito.spy(PayTerminal.class);
-        Steakhouse steakhouse = new Steakhouse(new Waitress(), new Kitchen(), spyTerminal);
+        PayTerminal mockTerminal = Mockito.mock(PayTerminal.class);
+        Steakhouse steakhouse = new Steakhouse(new Waitress(), new Kitchen(), mockTerminal);
+        Mockito.when(mockTerminal.pay(RIBS, RUB)).thenReturn(new Paycheck(RIBS.getPrice(), RUB, RIBS));
 
         Paycheck resultPaycheck = steakhouse.makeOrder(RIBS, RUB);
         Paycheck expectedPaycheck = new Paycheck(RIBS.getPrice(), RUB, RIBS);
